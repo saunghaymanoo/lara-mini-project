@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
+use App\Models\Photo;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
@@ -46,6 +49,7 @@ class ItemController extends Controller
         $item->name = $request->name;
         $item->code = $request->code;
         $item->sub_category_id = $request->subcategory;
+        $item->user_id = Auth::id();
         $item->price = $request->price;
         if ($request->photo) {
             $newN = uniqid() . "_photo_" . $request->file('photo')->getClientOriginalName();
@@ -57,6 +61,18 @@ class ItemController extends Controller
         }
 
         $item->save();
+
+        foreach($request->photos as $photo){
+            //save storage
+            $newN = uniqid()."_item_photo_". $photo->extension();
+            $photo->storeAs("public",$newN);
+
+            //save photos db
+            $photo = new Photo();
+            $photo->name = $newN;
+            $photo->item_id = $item->id;
+            $photo->save();
+        }
         return redirect()->route('item.index')->with('status', 'insert successful');
     }
 
@@ -79,7 +95,7 @@ class ItemController extends Controller
      */
     public function edit(Item $item)
     {
-
+        Gate::authorize('update',$item);
         return view('item.edit', compact('item'));
     }
 
@@ -92,6 +108,8 @@ class ItemController extends Controller
      */
     public function update(UpdateItemRequest $request, Item $item)
     {
+        Gate::authorize('update',$item);
+
         $item->name = $request->name;
         $item->code = $request->code;
         $item->sub_category_id = $request->subcategory;
@@ -124,6 +142,7 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
+        Gate::authorize('delete',$item);
         $item->delete();
         return redirect()->route('item.index')->with('status', 'delete successful');
 

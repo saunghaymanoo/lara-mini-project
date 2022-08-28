@@ -16,6 +16,11 @@ class SubCategoryPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
+    public function before(User $user){
+        if($user->role==='admin'||$user->role==='editor'){
+            return true;
+        }
+    }
     public function viewAny(User $user)
     {
         //
@@ -53,7 +58,7 @@ class SubCategoryPolicy
      */
     public function update(User $user, SubCategory $subCategory)
     {
-        //
+        return $user->id===$subCategory->user_id;
     }
 
     /**
@@ -65,7 +70,7 @@ class SubCategoryPolicy
      */
     public function delete(User $user, SubCategory $subCategory)
     {
-        //
+        return $user->id===$subCategory->user_id;
     }
 
     /**

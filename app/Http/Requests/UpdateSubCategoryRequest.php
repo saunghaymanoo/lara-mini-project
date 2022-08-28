@@ -3,7 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 class UpdateSubCategoryRequest extends FormRequest
 {
     /**
@@ -13,7 +14,7 @@ class UpdateSubCategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +25,8 @@ class UpdateSubCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "title" => "required",
+            "category" => "required|exists:categories,id",
         ];
     }
 }

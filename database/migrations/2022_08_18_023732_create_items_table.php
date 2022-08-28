@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('code');
             $table->foreignId('sub_category_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->bigInteger('price');
             $table->text('photo')->nullable();
             $table->bigInteger('discount')->nullable();

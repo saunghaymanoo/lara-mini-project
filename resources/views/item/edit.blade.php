@@ -9,7 +9,7 @@
   </ol>
 </nav>
 <div class="row">
-  <div class="col-9">
+  <div class="col-lg-7">
   <div class="card">
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-center">
@@ -49,6 +49,26 @@
           <div class="text-sm text-danger">{{$message}}</div>
           @enderror
         </div>
+
+        <div class="mb-3">
+        <div class="mb-2 d-flex position-relative">
+            @foreach($item->photos as $photo)
+              
+              <img src="{{asset('storage/'.$photo->name)}}" height="100" width="100" class="rounded" alt="">
+        
+              <form action="{{route('photo.destroy',$photo->id)}}" method="post" class="d-inline-block">
+              @csrf
+              @method('delete')
+              <button class="btn btn-outline-danger btn-sm position-absolute bottom-0 left-0 z-20 me-2">
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
+            
+           
+            @endforeach
+        </div>
+        <div>
+
         <div class="row border border-1 p-2 rounded mb-3">
           <div class="col-7">
             <label for="">Item Price</label>
@@ -65,22 +85,27 @@
             @enderror
           </div>
         </div>
-        <div class="form-group mb-4">
-          <label for="">Photo</label>
+        <div class="form-group my-4">
+         
+          <div class="d-flex align-items-end">
+          @if($item->photo)
+                <img src="{{asset('storage/'.$item->photo)}}" class="mr-2 rounded-pill" width="70" height="70" alt="">
+                <input type="hidden" name="oldphoto" value="{{old('photo',$item->photo)}}">
+          @endif
+          <div>
+          <label for="">Feature Photo</label>
           <input type="file" name="photo" class="p-1 form-control @error('photo') is-invalid @enderror">
           @error('photo')
           <div class="text-sm text-danger">{{$message}}</div>
           @enderror
+          </div>
+          </div>
+         
         </div>
         <div class="">
           <button class="btn btn-primary">Edit</button>
         </div>
-        <div class="form-group mb-4">
-            @if($item->photo)
-                <img src="{{asset('storage/'.$item->photo)}}" class="w-50" alt="">
-                <input type="hidden" name="oldphoto" value="{{old('photo',$item->photo)}}">
-            @endif
-        </div>
+       
         
       </div>
     </form>

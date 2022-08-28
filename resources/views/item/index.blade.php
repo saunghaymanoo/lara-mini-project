@@ -46,14 +46,18 @@
           <a href="{{route('item.show',$item->id)}}" class="btn btn-sm btn-outline-info">
             <i class="bi bi-info-circle"></i>
           </a>
+          @can('delete',$item)
           <form action="{{route('item.destroy',$item->id)}}" method='post' class='d-inline-block'>
             @csrf 
             @method('delete')
             <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash3"></i></button>
           </form>
+          @endcan
+          @can('update',$item)
           <a href="{{route('item.edit',$item->id)}}" class="btn btn-sm btn-outline-warning">
             <i class="bi bi-pencil"></i>
           </a>
+          @endcan
         </td>
       </tr>
       @endforeach

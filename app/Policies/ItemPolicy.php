@@ -16,6 +16,11 @@ class ItemPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
+    public function before(User $user){
+        if($user->role === 'admin'||$user->role === 'editor'){
+            return true;
+        }
+    }
     public function viewAny(User $user)
     {
         //
@@ -28,9 +33,10 @@ class ItemPolicy
      * @param  \App\Models\Item  $item
      * @return \Illuminate\Auth\Access\Response|bool
      */
+    
     public function view(User $user, Item $item)
     {
-        //
+        return $user->id == $item->user_id;
     }
 
     /**
@@ -53,7 +59,7 @@ class ItemPolicy
      */
     public function update(User $user, Item $item)
     {
-        //
+        return $user->id == $item->user_id;
     }
 
     /**
@@ -65,7 +71,8 @@ class ItemPolicy
      */
     public function delete(User $user, Item $item)
     {
-        //
+        return $user->id == $item->user_id;
+        
     }
 
     /**

@@ -11,4 +11,7 @@ class Category extends Model
     public function user(){
         return $this->belongsTo('App\Models\User');
     }
+    public function subcategories(){
+        return $this->hasMany(SubCategory::class);
+    }
 }

@@ -21,7 +21,9 @@
         <tr>
           <th>#</th>
           <th>Title</th>
+          @if(!Auth::user()->isAuthor())
           <th>User Name</th>
+          @endif
           <th>Control</th>
           <th>Created AT</th>
         </tr>
@@ -31,19 +33,33 @@
         <tr>
           <td>{{$c->id}}</td>
           <td>{{$c->title}}</td>
+          @if(!Auth::user()->isAuthor())
           <td>{{$c->user->name}}</td>
+          @endif
           <td>
+            @can('update',$c)
             <form action="{{route('category.destroy',$c->id)}}" method="post" class="d-inline-block">
               @csrf
               @method('delete')
-            <button class="btn btn-outline-danger btn-sm">
-              Del
-            </button>
+              <button class="btn btn-outline-danger btn-sm">
+                Del
+              </button>
             </form>
-
+            @endcan
+            @can('update',$c)
             <a href="{{route('category.edit',$c->id)}}" class="btn btn-outline-warning btn-sm">
               Edit
             </a>
+            @endcan
+            @php 
+            if(Auth::user()->isAuthor()){
+             if($c->user->id != Auth::id()){
+              
+              echo "-";
+              
+             }
+            }  
+            @endphp
           </td>
           <td>
             <p><i class="fa fa-calendar-alt"></i>{{$c->created_at->format('d m Y')}}</p>
@@ -51,6 +67,11 @@
           </td>
         </tr>
         @endforeach
+        <!-- @if(empty($category))
+        <tr>
+          <td colspan="5" class="text-center">There is no your category</td>
+        </tr>
+        @endif -->
       </tbody>
     </table>
   </div>

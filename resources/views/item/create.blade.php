@@ -48,6 +48,23 @@
           <div class="text-sm text-danger">{{$message}}</div>
           @enderror
         </div>
+
+        <div class="mb-3">
+          <label for="photos" class="form-label">item Photos</label>
+          <input
+           type="file"
+           class="form-control @error('photos') is-invalid @enderror @error('photos.*') is-invalid @enderror p-1" 
+           name="photos[]" multiple 
+           id="photos" 
+           >
+          @error('photos')
+          <div class="invalid-feedback">{{$message}}</div>
+          @enderror
+          @error('photos.*')
+          <div class="invalid-feedback">{{$message}}</div>
+          @enderror
+        </div>
+
         <div class="row border border-1 p-2 rounded mb-3">
           <div class="col-7">
             <label for="">Item Price</label>
@@ -65,7 +82,7 @@
           </div>
         </div>
         <div class="form-group mb-4">
-          <label for="">Photo</label>
+          <label for="">Feature Photo</label>
           <input type="file" name="photo" class="p-1 form-control @error('photo') is-invalid @enderror">
           @error('photo')
           <div class="text-sm text-danger">{{$message}}</div>

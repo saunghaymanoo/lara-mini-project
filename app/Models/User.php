@@ -44,4 +44,10 @@ class User extends Authenticatable
     public function categories(){
         return $this->hasMany('App\Models\Category');
     }
+    public function isAuthor(){
+        return $this->role === 'author';
+    }
+    public function isAdmin(){
+        return $this->role === 'admin';
+    }
 }

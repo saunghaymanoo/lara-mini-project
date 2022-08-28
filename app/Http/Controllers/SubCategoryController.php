@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\SubCategory;
 use App\Http\Requests\StoreSubCategoryRequest;
 use App\Http\Requests\UpdateSubCategoryRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class SubCategoryController extends Controller
 {
@@ -15,7 +18,13 @@ class SubCategoryController extends Controller
      */
     public function index()
     {
-        //
+        $subcategories = SubCategory::when(request('keyword'),function($q){
+            $keyword = request('keyword');
+            $q -> orWhere('title',"like","%$keyword%");
+        })
+        // ->when(Auth::user()->role === 'author',fn($q)=>$q->where('user_id',Auth::id()))
+        ->latest('id')->get();
+        return view('subcategory.index', compact('subcategories'));
     }
 
     /**
@@ -25,7 +34,7 @@ class SubCategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('subcategory.create');
     }
 
     /**
@@ -36,7 +45,12 @@ class SubCategoryController extends Controller
      */
     public function store(StoreSubCategoryRequest $request)
     {
-        //
+        $subcategory = new SubCategory();
+        $subcategory->title = $request->title;
+        $subcategory->category_id = $request->category;
+        $subcategory->user_id = Auth::id();
+        $subcategory->save();
+        return redirect()->route('subcategory.index')->with('status','insert is successful!');
     }
 
     /**
@@ -47,7 +61,7 @@ class SubCategoryController extends Controller
      */
     public function show(SubCategory $subCategory)
     {
-        //
+        return abort(404);
     }
 
     /**
@@ -56,9 +70,11 @@ class SubCategoryController extends Controller
      * @param  \App\Models\SubCategory  $subCategory
      * @return \Illuminate\Http\Response
      */
-    public function edit(SubCategory $subCategory)
+    public function edit($subcategory)
     {
-        //
+        $subCategory = SubCategory::findOrFail($subcategory);
+        Gate::authorize('update',$subCategory);
+        return view('subcategory.edit',compact('subCategory'));
     }
 
     /**
@@ -68,9 +84,17 @@ class SubCategoryController extends Controller
      * @param  \App\Models\SubCategory  $subCategory
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateSubCategoryRequest $request, SubCategory $subCategory)
+    public function update(UpdateSubCategoryRequest $request, SubCategory $subCategory,$subcategory)
     {
-        //
+        $subCategory = SubCategory::findOrFail($subcategory);
+        Gate::authorize('update',$subCategory);
+
+        $subCategory->title = $request->title;
+        $subCategory->category_id = $request->category;
+        $subCategory->user_id = Auth::id();
+        $subCategory->update();
+        return redirect()->route('subcategory.index')->with('status','update is successful!');
+
     }
 
     /**
@@ -79,8 +103,13 @@ class SubCategoryController extends Controller
      * @param  \App\Models\SubCategory  $subCategory
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SubCategory $subCategory)
+    public function destroy(SubCategory $subCategory,$subcategory)
     {
-        //
+        $subCategory = SubCategory::findOrFail($subcategory);
+        Gate::authorize('delete',$subCategory);
+
+        $subCategory->delete();
+        return redirect()->route('subcategory.index')->with('status','delete is successful!');
+        
     }
 }

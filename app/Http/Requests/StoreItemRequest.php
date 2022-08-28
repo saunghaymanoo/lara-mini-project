@@ -29,7 +29,9 @@ class StoreItemRequest extends FormRequest
             "subcategory" => "required|exists:sub_categories,id",
             "price" => "required|numeric",
             "discount" => "nullable|numeric",
-            "photo" => "nullable|mimes:jpeg,jpg,png|file|max:512"
+            "photo" => "nullable|mimes:jpeg,jpg,png|file|max:512",
+            "photos" => "required",
+            "photos.*" =>"mimes:jpeg,jpg,png|file|max:512",
         ];
     }
 }

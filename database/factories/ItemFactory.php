@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\SubCategory;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use phpDocumentor\Reflection\Types\Nullable;
 
@@ -23,6 +24,7 @@ class ItemFactory extends Factory
             "name" => $this->faker->sentence(10),
             "code" => $codes[array_rand($codes)],
             "sub_category_id" => SubCategory::inRandomOrder()->first()->id,
+            "user_id" => 1,
             "price" => floor($this->faker->randomFloat()),           
             "discount" => 1000
 
