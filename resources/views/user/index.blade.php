@@ -42,11 +42,13 @@
           <a href="{{route('user.show',$user->id)}}" class="btn btn-sm btn-outline-info">
             <i class="bi bi-info-circle"></i>
           </a>
+          @admin
           <form action="{{route('user.destroy',$user->id)}}" method='post' class='d-inline-block'>
             @csrf 
             @method('delete')
             <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash3"></i></button>
           </form>
+          @endadmin
           <a href="{{route('user.edit',$user->id)}}" class="btn btn-sm btn-outline-warning">
             <i class="bi bi-pencil"></i>
           </a>

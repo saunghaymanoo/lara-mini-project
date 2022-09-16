@@ -3,15 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-12 col-lg-6">
-            <h1>Items</h1>
-        
-            <form url="{{route('page.index') }}" class="my-4">
-                <div class="input-group">
-                    <input type="text" name="keyword" class="form-control" value="{{request('keyword')}}">
-                    <button class="btn btn-primary">Search</button>
-                </div>
-            </form> 
+        <div class="col-12 col-lg-7">
             @isset($subcategory)
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <p>Filter By : {{ $subcategory->title }}</p>
@@ -50,10 +42,36 @@
             <div class="card">
                 <div class="card-body">
                     <h1>There is no items yet!</h1>
+                    <a href="{{ route('page.index') }}" class="btn  btn-outline-primary">See All</a>
                 </div>
             </div>
             @endforelse
            
+        </div>
+        <div class="col-12 col-lg-5">
+            <div class="">
+                <h2>Item Search</h2>
+                <form url="{{route('item.index') }}" class="my-4">
+                    <div class="input-group">
+                        <input type="text" name="keyword" class="form-control" value="{{request('keyword')}}">
+                        <button class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+            </div>
+            <div class="">
+                <h2>Categories</h2>
+                <div class="list-group">
+                    @foreach($subcategories as $category)
+                    <a 
+                    class="list-group-item {{request()->url() === route('page.itembysubcategory',$category->id) ? 'active' : ''}}" 
+                    href="{{route('page.itembysubcategory',$category->id)}}"
+                    >
+                        {{$category->title}}
+                    </a>
+                    @endforeach
+
+                </div>
+            </div>
         </div>
     </div>
 </div>

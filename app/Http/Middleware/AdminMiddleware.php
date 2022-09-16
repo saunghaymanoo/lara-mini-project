@@ -19,10 +19,14 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (Auth::user()->role != 'admin') {
+            if(request('user')){
             if (request('user') == Auth::id()) {
                 return $next($request);
             } else {
                 return abort(404);
+            }
+            }else{
+                return $next($request);
             }
         }else{
             return $next($request);
